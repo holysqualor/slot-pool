@@ -1,4 +1,4 @@
-# slpool
+# slot pool
 
 A lightweight, high-performance **Slab Allocator** and **Object Pool** with an integrated doubly linked list for C applications.
 
