@@ -107,8 +107,8 @@ sl_id sl_add(sl_pool p, const void *e, sl_id id) {
     	char *buffer = realloc(p->buffer, p->ssize * cap);
 		if(!buffer)
 			return nullid;
-			p->buffer = buffer;
-			p->cap = cap;
+		p->buffer = buffer;
+		p->cap = cap;
 	}
 	sl_id place = p->hlen ? p->holes[--p->hlen] : p->len * p->ssize;
 	sl_id prev = id == nullid ? p->last : sl_prev(p, id);
