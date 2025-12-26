@@ -2,7 +2,8 @@
 #include "slpool.h"
 
 void print(void *element, const void *ctx) {
-	printf("%d\n", *(int*)element);
+	if(!ctx)
+		printf("%d\n", *(int*)element);
 }
 
 int main() {
