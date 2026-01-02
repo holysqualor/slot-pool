@@ -1,25 +1,9 @@
-# slot pool
+#slot pool
 
-A lightweight, high-performance **Slab Allocator** and **Object Pool** with an integrated doubly linked list for C applications.
+**Slot pool** is a combination of a linked list and a vector. A slot is an analogue of a node from a linked list, but it does not require memory allocation/freeing with each modification of the structure. Memory for slots is allocated in advance and increases when a capacity is reached. Due to reallocations, slot identifiers (`sl_id`), which are byte offsets, are used instead of pointers. A special mechanism ensures efficient memory use: when an element is deleted, its slot is unbound, and the identifier is added to a stack, and if an element is added after that, it will be written to the newly deleted slot. If the stack is empty, the new element is added to the physical end of the pool. Slot data is not modified when deleted, which allows its reuse. The `sl_exp` function shows whether a new (`1`) or old (`0`) slot was used when the element was last added, in which case it is enough to change the data without allocating new memory (this is useful when the pool elements are dynamic objects). The pool destruction function can be passed a destructor that is called for all, even unbound, elements.
 
-`slpool` was designed for systems that require frequent insertion/deletion of fixed-size objects while maintaining memory locality and stable identifiers.
-
----
-
-## Key Features
-
-- **Stable Identifiers (`sl_id`)**: Unlike raw pointers, IDs remain valid even after the internal buffer is reallocated.
-- **Zero Fragmentation**: Uses an internal "holes" stack to reuse deleted slots immediately.
-- **High Water Mark Optimization**: Tracks the physical growth of the pool to support lazy initialization.
-- **O(1) Manipulations**: Adding, removing, and accessing elements are constant-time operations.
-- **Cache Friendly**: All data is stored in a contiguous memory block.
-
----
-
-## Installation
-
-Simply include the header and source in your project:
-
-```bash
-cp include/slpool.h your_project/
-cp src/slpool.c your_project/
+Slot pool claims to replace the classic linked list, because it uses memory much more efficiently. Main advantages:
+- minimum memory allocations/frees
+- memory reuse
+- cache locality
+- pool cleaning `O(1)`
